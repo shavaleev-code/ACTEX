@@ -7,7 +7,6 @@ using Server.Model;
 
 namespace Server.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]")]
     [Produces("application/json")]

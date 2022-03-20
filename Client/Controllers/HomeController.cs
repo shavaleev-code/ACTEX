@@ -153,8 +153,6 @@ namespace Client.Controllers
             {
                 ExtensionMethods.Set(url);
             }
-
-
         }
     }
 }
