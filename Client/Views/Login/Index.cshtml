@@ -1,0 +1,17 @@
+﻿@using Client.Models
+@model AuthModel
+<form class="form-control-lg col-4" asp-action="Auth" asp-controller="Login" method="get">
+  <div class="form-group mb-3">
+    <label class="mb-3">Логин</label>
+    <input class="form-control" name="Login" value="@Model.Login" placeholder="Введите логин">
+  </div>
+  <div class="form-group mb-3">
+    <label class="mb-3">Пароль</label>
+    <input class="form-control" name="Password" value="@Model.Password" placeholder="Пароль">
+  </div>
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input">
+    <label class="form-check-label">Запомнить меня</label>
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+</form>

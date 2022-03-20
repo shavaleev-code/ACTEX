@@ -1,0 +1,195 @@
+﻿@model IndexModel
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row mb-3">
+    <div class="col-3">
+            <div class="row">
+                <div class="col-8">
+                     <select id="provider" class="form-control">
+                          <option value="0">База данных</option>
+                          <option value="1">Файл</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button id="changeProvider" type="button" class="btn btn-primary ml-lg-2">Выбрать</button>
+                </div>
+            </div>
+    </div>
+    <div class="col-9">
+            <div class="row">
+                <div class="col-3">
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Имя пользователя">
+                </div>
+                <div class="col-2">
+                     <select id="type" name="type" class="form-control">
+                          <option value=""></option>
+                        @foreach(var type in Model.Types)
+                        {
+                            <option value="@type">@type</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-3">
+                    <input type="date" id="dateFrom" name="dateFrom" class="form-control" placeholder="Дата с">
+                </div>
+                <div class="col-3">
+                    <input type="date" id="dateTo" name="dateTo" class="form-control" placeholder="Дата по">
+                </div>
+                <div class="col-1">
+                    <button id="sortUserTable" type="button" class="btn btn-primary ml-lg-2">Поиск</button>
+                </div>
+            </div>
+    </div>
+</div>
+<div>
+  <table id="userTable" class="table table-striped" >
+  <thead>
+    <tr role="row2">
+        <th>Номер</th>
+        <th>Имя</th>
+        <th>Логин</th>
+        <th>Пароль</th>
+        <th>Тип</th>
+        <th>Последний вход</th>     
+    </tr>
+  </thead>
+  <tbody class="toclick">
+  </tbody>
+  <tfoot></tfoot>
+</table>
+</div>
+<div id="modal"></div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.dataTables.js"></script>
+<link rel="stylesheet" href="~/lib/jquery/dist/chosen.min.css" />
+<script src="~/lib/jquery/dist/chosen.jquery.min.js"></script>
+
+<script>
+    var userTable;
+    var userName = $("#name");
+    var userType = $("#type");
+    var dateFrom =$("#dateFrom");
+    var dateTo = $("#dateTo");
+
+    var config = {
+        contextPath: '@Url.Content("~")'
+    };
+
+    $(function () {
+                userTable = $("#userTable").DataTable(
+                {
+                    "sAjaxSource": config.contextPath + "Home/GetUsers",
+                    "fnServerParams" : function(aoData){
+                        aoData.push({"name" : "name", "value" : userName.val() });
+                        aoData.push({"name" : "type", "value" : userType.val() });
+                        aoData.push({"name" : "dateFrom", "value" : dateFrom.val() });
+                        aoData.push({"name" : "dateTo", "value" : dateTo.val() });
+                    },
+                    "paging": false,
+                    "pageLength": 7,
+                     "bPaginate": false,
+                    "bFilter": false,
+                    "info": false,
+                    "stateSave": true,
+                    "bSearching": true,
+                    "serverSide": false,
+                    "searchable": false,
+                    "bProcessing": true,
+                    "bStateSave": true,
+                    "responsive": true,
+                    "lengthChange": false,
+                    "autoWidth": false,
+                    "bLengthChange": false,
+                    "scrollX": 600,
+                    "scrollY": 440,
+                    select: {style: 'single'},
+                    "fnRowCallback": function (nRow, aData, iDisplayIndex) {return nRow;}
+            });
+        });
+
+    $("#sortUserTable").click(function (){
+        userTable.ajax.reload();
+    });
+
+     $("#changeProvider").click(function (){
+         $.ajax({
+            url: '@Url.Action("ChangeProvider", "Home")',
+            type: "GET",
+            data: { provider: $("#provider").val()},
+            success : function(data){
+                userTable.ajax.reload();
+                return false;
+            }
+        });       
+     });
+
+    function createModalWindow()
+    {
+        $.ajax({
+            url: '@Url.Action("CreateModalWindow", "Home")',
+            type: "GET",
+            data: { selectorName: selectorName},
+            success: function (data)
+            {
+                $("#modal").html(data);
+                var modal = $("#modalWindow").attr('id', 'modalWindow-' + $(".tabnav-link").attr('id'));  //???
+                $(modal).modal('show');
+                return false;
+            },
+            error: function (data)
+            {
+                return false;
+            }
+            });
+    }
+
+    $(function () {
+        $.ajax({
+            url: '@Url.Action("IsUserAllowEdit", "Home")',
+            type: "GET",
+            data: { },
+            success: function (data)
+            {
+                if(data == 1)
+                {
+                    tableEditAllow();
+                }
+                return false;
+            },
+            error: function (data)
+            {
+                return false;
+            }
+        });
+    });
+
+    function tableEditAllow(){
+        $('#userTable tbody').on( 'click', 'tr', function () {
+           var elements = (this).getElementsByTagName( 'td' );
+           var dataArray = Array.from(elements);
+           var arr = dataArray.map(t => {return t.innerText});
+
+           $.ajax({
+                    url: '@Url.Action("EditModalWindow", "Home")',
+                    type: "GET",
+                    data: { id : arr[0], name : arr[1], login : arr[2], password : arr[3], type : arr[4], date : arr[5] },
+                    success: function (data)
+                    {
+                        $("#modal").html(data);
+                        var modal = $("#modalWindow").attr('id', 'modalWindow-' + $(".tabnav-link").attr('id'));  
+                        $(modal).modal('show');
+                        return false;
+                    },
+                    error: function (data)
+                    {
+                        return false;
+                    }
+                });
+        });
+    }
+</script>

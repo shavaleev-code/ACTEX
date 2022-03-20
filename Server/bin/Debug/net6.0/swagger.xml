@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Server</name>
+    </assembly>
+    <members>
+        <member name="M:Server.Controllers.UserController.GetUsers">
+            <summary>
+            Возвращает список всех пользователей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Server.Controllers.UserController.GetUserTypes">
+            <summary>
+            Возвращает список всех типов пользователей
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Server.Controllers.UserController.GetUsersWithName(System.String)">
+            <summary>
+            Возвращает список всех типов пользователей, у которых имя содержит name
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Server.Controllers.UserController.GetUsersWithType(System.String)">
+            <summary>
+            Возвращает список всех типов пользователей c типом type
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Server.Controllers.UserController.GetUsersWithDate(System.DateTime,System.DateTime)">
+            <summary>
+            Возвращает список всех типов пользователей, с датой последнего визита между from и to
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Server.Controllers.UserController.SetDataProviderDb">
+            <summary>
+            Устанавливает источник данных - базу данных
+            </summary>
+        </member>
+        <member name="M:Server.Controllers.UserController.SetDataProviderDoc">
+            <summary>
+            Устанавливает источник данных - файл
+            </summary>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUsers">
+            <summary>
+            Обращается к источнику данных, запрашивает список пользователей
+            </summary>
+            <returns>Возвращает всех пользователей</returns>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUsersWithName(System.String)">
+            <summary>
+            Обращается к источнику данных, запрашивает список пользователей, подходящих по фильтру
+            </summary>
+            <param name="name"></param>
+            <returns>Возвращает всех пользователей, у которых в имя содержит name</returns>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUsersWithType(System.Int32)">
+            <summary>
+            Обращается к источнику данных, запрашивает список пользователей, подходящих по фильтру
+            </summary>
+            <param name="type"></param>
+            <returns>Возвращает всех пользователей с типом type</returns>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUsersWithDate(System.DateTime,System.DateTime)">
+            <summary>
+            Обращается к источнику данных, запрашивает список пользователей, подходящих по фильтру
+            </summary>
+            <param name="from"></param>
+            <param name="to"></param>
+            <returns>Возвращает всех пользователей, у которых дата последнего визита находится между from и to</returns>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUserTypes">
+            <summary>
+            Обращается к источнику данных, запрашивает список типов пользователей
+            </summary>
+            <returns>Возвращает все типы пользователей</returns>
+        </member>
+        <member name="M:Server.Interfaces.IDataProvider.GetUser(System.String,System.String)">
+            <summary>
+            Обращается к источнику данных, запрашивает данные пользователя с логином и паролем 
+            </summary>
+            <returns>Возвращает пользователя</returns>
+        </member>
+    </members>
+</doc>
